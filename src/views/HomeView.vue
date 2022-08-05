@@ -37,7 +37,7 @@
       <div class="meetups-list">
         <a v-for="meetup in filteredMeetups" :href="`/meetups/${meetup.id}`" class="meetups-list__item">
           <div class="meetups-list__col">
-            <div class="meetups-list__cover">
+            <div class="meetups-list__cover" :style="meetup.coverStyle">
               <!--    *** достаем title из json ***-->
               <h5>{{ meetup.title }}</h5>
             </div>
@@ -103,6 +103,8 @@ export default {
     meetups() {
       return this.rawMeetups.map((meetup) => ({
         ...meetup,
+        cover: meetup.imageId ? `https://course-vue.javascript.ru/api/images/${meetup.imageId}` : undefined,
+        coverStyle: meetup.imageId ? {'--bg-url': `url('https://course-vue.javascript.ru/api/images/${meetup.imageId}')`} : undefined,
         date: new Date(meetup.date),
         localDate: new Date(meetup.date).toLocaleString(navigator.language, {
           year: 'numeric',
