@@ -1,10 +1,44 @@
 <template>
   <main class="main">
     <div class="container">
+      <div class="filters-panel">
+        <div class="filters-panel__col">
+          <div class="filters-panel filters-panel_inline">
+            <div class="input-group input-group_icon input-group_icon-left">
+              <!--    *** все картинки должны быть в папке assets ***-->
+              <img src="../assets/search.png" alt="icon" class="icon" width="20" height="20">
+              <input
+                  id="filters-panel__search"
+                  type="text"
+                  class="form-control__input"
+                  placeholder="Поиск"
+                  :value="filter.search"
+                  v-on:input="inputHandler"
+              />
+            </div>
+          </div>
+        </div>
+        <!--        <div class="filters-panel__col">-->
+        <!--          <div class="form-check">-->
+        <!--            <div class="form-check__group">-->
+        <!--              <input-->
+        <!--                  type="radio"-->
+        <!--                  class="form-check__input"-->
+        <!--                  name="date"-->
+        <!--                  checked="checked"-->
+        <!--                  value="all"-->
+        <!--              />-->
+        <!--              <label class="form-check__label">All</label>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+      </div>
       <div class="meetups-list">
-        <a v-for="meetup in meetups" href="/meetups/1" class="meetups-list__item">
+        <a v-for="meetup in meetups" :href="`/meetups/${meetup.id}`" class="meetups-list__item">
           <div class="meetups-list__col">
             <div class="meetups-list__cover">
+              <!--    *** достаем title из json ***-->
               <h5>{{ meetup.title }}</h5>
             </div>
             <div class="meetups-list__col">
@@ -31,7 +65,7 @@
                     {{ meetup.place }}
                   </li>
                   <li><img class="icon info-list__icon" src="../assets/logo.png" alt="icon"/>
-                  <time datetime="2020-02-31">{{meetup.date}}</time>
+                    <time datetime="2020-02-31">{{ meetup.date }}</time>
                   </li>
                 </ul>
               </div>
@@ -39,23 +73,6 @@
           </div>
         </a>
       </div>
-
-      <!--      <div class="filters-panel">-->
-      <!--        <div class="filters-panel__col">-->
-      <!--          <div class="form-check">-->
-      <!--            <div class="form-check__group">-->
-      <!--              <input-->
-      <!--                  type="radio"-->
-      <!--                  class="form-check__input"-->
-      <!--                  name="date"-->
-      <!--                  checked="checked"-->
-      <!--                  value="all"-->
-      <!--              />-->
-      <!--              <label class="form-check__label">All</label>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
   </main>
 </template>
@@ -69,11 +86,22 @@ export default {
   name: 'HomeView',
   data() {
     return {
-      meetups: meetupsData
+      meetups: meetupsData,
+      filter: {
+        date: 'all',
+        participation: 'all',
+        search: '',
+      }
     }
   },
   components: {
     HelloWorld
+  },
+  methods: {
+    inputHandler(e) {
+      this.filter.search = e.target.value
+      console.log(e.target.value)
+    }
   }
 }
 </script>

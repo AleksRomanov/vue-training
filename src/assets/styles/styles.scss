@@ -3,6 +3,24 @@
   margin: 0 auto;
 }
 
+.filters-panel {
+  margin-bottom: 20px;
+
+  & img {
+    margin-right: 10px;
+  }
+}
+
+.input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-check__input {
+  margin-right: 10px;
+}
+
 .info-list {
   list-style: none;
   padding: 0;
@@ -15,7 +33,7 @@
     flex-direction: column;
 
    & img {
-      width: 250px;
+      width: 150px;
     }
   }
 }
