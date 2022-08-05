@@ -9,8 +9,20 @@
             </div>
             <div class="meetups-list__col">
               <div class="meetups-list__description">
-                <span v-show="meetup.attending" class="meetups-list__badge meetups-list__success">Участвую</span>
-                <span v-show="meetup.organizing" class="meetups-list__badge">Организую</span>
+
+                <!--    *** v-show ***-->
+                <!--    <span v-show="meetup.attending" class="meetups-list__badge meetups-list__success">Участвую</span>-->
+                <!--    <span v-show="meetup.organizing" class="meetups-list__badge">Организую</span>-->
+
+                <!--    *** v-if ***-->
+                <!--    <span v-if="meetup.attending" class="meetups-list__badge meetups-list__success">Участвую</span>-->
+                <!--    <span v-if="meetup.organizing" class="meetups-list__badge">Организую</span>-->
+
+                <!--    *** Вариант if else ***-->
+                <span v-if="meetup.attending" class="meetups-list__badge meetups-list__success">Участвую</span>
+                <span v-else-if="meetup.organizing" class="meetups-list__badge">Организую</span>
+                <span v-else>ELSE</span>
+
                 <ul class="info-list">
                   <li><img class="icon info-list__icon" src="../assets/logo.png" alt="icon"/>
                     {{ meetup.organizer }}

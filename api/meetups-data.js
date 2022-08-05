@@ -30,6 +30,6 @@ export default [
         "organizer": "VADYA",
         "place": "SPB",
         "organizing": false,
-        "attending": true
+        "attending": false
     }
 ]
