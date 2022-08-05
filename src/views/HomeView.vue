@@ -13,7 +13,7 @@
                   class="form-control__input"
                   placeholder="Поиск"
                   :value="filter.search"
-                  v-on:input="inputHandler"
+                  v-on:input="filter.search = $event.target.value"
               />
             </div>
           </div>
@@ -98,10 +98,10 @@ export default {
     HelloWorld
   },
   methods: {
-    inputHandler(e) {
-      this.filter.search = e.target.value
-      console.log(e.target.value)
-    }
+    // inputHandler(e) {
+    //   this.filter.search = e.target.value
+    //   console.log(e.target.value)
+    // }
   }
 }
 </script>
