@@ -12,8 +12,7 @@
                   type="text"
                   class="form-control__input"
                   placeholder="Поиск"
-                  :value="filter.search"
-                  v-on:input="filter.search = $event.target.value"
+                  v-model="filter.search"
               />
             </div>
           </div>
@@ -35,7 +34,7 @@
 
       </div>
       <div class="meetups-list">
-        <a v-for="meetup in meetups" :href="`/meetups/${meetup.id}`" class="meetups-list__item">
+        <a v-for="meetup in filteredMeetups" :href="`/meetups/${meetup.id}`" class="meetups-list__item">
           <div class="meetups-list__col">
             <div class="meetups-list__cover">
               <!--    *** достаем title из json ***-->
@@ -91,17 +90,52 @@ export default {
         date: 'all',
         participation: 'all',
         search: '',
-      }
+      },
+      filteredMeetups: meetupsData,
+      // hello: 'world'
     }
   },
+
+  watch: {
+    filter: {
+      deep: true,
+      handler() {
+        this.filteredMeetups = this.getFilteredMeetups();
+      }
+    }
+    // hello(newValue, oldValue) {
+    //   console.log(newValue, oldValue)
+    // }
+  },
+
   components: {
     HelloWorld
   },
   methods: {
-    // inputHandler(e) {
-    //   this.filter.search = e.target.value
-    //   console.log(e.target.value)
-    // }
+    filteredMeetups() {
+      const datefilter = (meetup) =>
+          this.filter.date === 'all' ||
+          (this.filter.date === 'past' && new Date(meetup.date) <= new Date()) ||
+          (this.filter.date === 'future' && new Date(meetup.date) > new Date());
+
+      const participationfilter = (meetup) =>
+          this.filter.participation === 'all' ||
+          (this.filter.participation === 'organizing' && new Date(meetup.participation) <= new Date()) ||
+          (this.filter.participation === 'attending' && new Date(meetup.participation) > new Date());
+
+      const searchfilter = (meetup) =>
+          [meetup.title, meetup.description, meetup.place, meetup.organizer]
+              .join(' ')
+              .toLowerCase()
+              .includes(this.filter.search.toLowerCase());
+
+      return this.meetups.filter(
+          (meetup) =>
+              datefilter(meetup) &&
+              participationfilter(meetup) &&
+              searchfilter(meetup),
+      );
+    },
   }
 }
 </script>
