@@ -65,7 +65,7 @@
                     {{ meetup.place }}
                   </li>
                   <li><img class="icon info-list__icon" src="../assets/logo.png" alt="icon"/>
-                    <time datetime="2020-02-31">{{ localDate(meetup.date) }}</time>
+                    <time datetime="2020-02-31">{{ meetup.localDate }}</time>
                   </li>
                 </ul>
               </div>
@@ -86,7 +86,7 @@ export default {
   name: 'HomeView',
   data() {
     return {
-      meetups: meetupsData,
+      rawMeetups: meetupsData,
       filter: {
         date: 'all',
         participation: 'all',
@@ -98,6 +98,19 @@ export default {
   },
   components: {
     HelloWorld
+  },
+  computed: {
+    meetups() {
+      return this.rawMeetups.map((meetup) => ({
+        ...meetup,
+        date: new Date(meetup.date),
+        localDate: new Date(meetup.date).toLocaleString(navigator.language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      }))
+    }
   },
   methods: {
     getfilteredMeetups() {
@@ -124,13 +137,6 @@ export default {
               searchfilter(meetup),
       );
     },
-    localDate(date) {
-      return new Date(date).toLocaleString(navigator.language, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    }
   },
   watch: {
     filter: {
