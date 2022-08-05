@@ -13,6 +13,7 @@
                   class="form-control__input"
                   placeholder="Поиск"
                   v-model="filter.search"
+                  @change="filteredMeetups = getfilteredMeetups()"
               />
             </div>
           </div>
@@ -77,7 +78,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+
 import HelloWorld from '@/components/HelloWorld.vue'
 import meetupsData from "../../api/meetups-data";
 
@@ -95,24 +96,11 @@ export default {
       // hello: 'world'
     }
   },
-
-  watch: {
-    filter: {
-      deep: true,
-      handler() {
-        this.filteredMeetups = this.getFilteredMeetups();
-      }
-    }
-    // hello(newValue, oldValue) {
-    //   console.log(newValue, oldValue)
-    // }
-  },
-
   components: {
     HelloWorld
   },
   methods: {
-    filteredMeetups() {
+    getfilteredMeetups() {
       const datefilter = (meetup) =>
           this.filter.date === 'all' ||
           (this.filter.date === 'past' && new Date(meetup.date) <= new Date()) ||
@@ -136,7 +124,18 @@ export default {
               searchfilter(meetup),
       );
     },
-  }
+  },
+  watch: {
+    filter: {
+      deep: true,
+      handler() {
+        this.filteredMeetups = this.getfilteredMeetups();
+      }
+    }
+    // hello(newValue, oldValue) {
+    //   console.log(newValue, oldValue)
+    // }
+  },
 }
 </script>
 
