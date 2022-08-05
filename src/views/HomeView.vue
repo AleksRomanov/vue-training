@@ -65,7 +65,7 @@
                     {{ meetup.place }}
                   </li>
                   <li><img class="icon info-list__icon" src="../assets/logo.png" alt="icon"/>
-                    <time datetime="2020-02-31">{{ meetup.date }}</time>
+                    <time datetime="2020-02-31">{{ localDate(meetup.date) }}</time>
                   </li>
                 </ul>
               </div>
@@ -92,7 +92,7 @@ export default {
         participation: 'all',
         search: '',
       },
-      filteredMeetups: meetupsData,
+      filteredMeetups: [],
       // hello: 'world'
     }
   },
@@ -124,10 +124,18 @@ export default {
               searchfilter(meetup),
       );
     },
+    localDate(date) {
+      return new Date(date).toLocaleString(navigator.language, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
   },
   watch: {
     filter: {
       deep: true,
+      immediate: true,
       handler() {
         this.filteredMeetups = this.getfilteredMeetups();
       }
