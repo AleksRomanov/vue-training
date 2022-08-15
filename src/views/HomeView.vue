@@ -16,6 +16,34 @@
                   @change="filteredMeetups = getfilteredMeetups()"
               />
             </div>
+
+            <div class="input-group__checkbox">
+              <input
+                  type="radio"
+                  class="form-check__input"
+                  name="date"
+                  v-model="filter.date"
+                  value="all"
+              />
+              <label class="form-check__label">Все</label>
+              <input
+                  type="radio"
+                  class="form-check__input"
+                  name="date"
+                  v-model="filter.date"
+                  value="past"
+              />
+              <label class="form-check__label">Прошедшие</label>
+              <input
+                  type="radio"
+                  class="form-check__input"
+                  name="date"
+                  v-model="filter.date"
+                  value="future"
+              />
+              <label class="form-check__label">Будущие</label>
+            </div>
+
           </div>
         </div>
         <!--        <div class="filters-panel__col">-->
@@ -34,7 +62,19 @@
         <!--        </div>-->
 
       </div>
-      <div class="meetups-list">
+      <div class="meetups-page-tabs">
+        <button @click="view = 'list'" class="meetups-page-tabs__tab meetups-page-tabs__tab_active" type="button">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="black"/>
+          </svg>
+        </button>
+        <button @click="view = 'calendar'" class="meetups-page-tabs__tab" type="button">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="red"/>
+          </svg>
+        </button>
+      </div>
+      <div v-if="view === 'list'" class="meetups-list">
         <a v-for="meetup in filteredMeetups" :href="`/meetups/${meetup.id}`" class="meetups-list__item">
           <div class="meetups-list__col">
             <div class="meetups-list__cover" :style="meetup.coverStyle">
@@ -65,7 +105,7 @@
                     {{ meetup.place }}
                   </li>
                   <li><img class="icon info-list__icon" src="../assets/logo.png" alt="icon"/>
-                    <time datetime="2020-02-31">{{ meetup.localDate }}</time>
+                    <time datetime="1972-02-31">{{ meetup.localDate }}</time>
                   </li>
                 </ul>
               </div>
@@ -73,6 +113,7 @@
           </div>
         </a>
       </div>
+      <div v-else-if="view === 'calendar'" class="meetups-calendar">КАЛЕНДАРЬ!!!</div>
     </div>
   </main>
 </template>
@@ -93,6 +134,7 @@ export default {
         search: '',
       },
       filteredMeetups: [],
+      view: 'list',
       // hello: 'world'
     }
   },
