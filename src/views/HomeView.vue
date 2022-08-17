@@ -1,5 +1,5 @@
 <template>
-  <main class="main">
+  <main class="main" v-if="rawMeetups">
     <div class="container">
       <div class="filters-panel">
         <div class="filters-panel__col">
@@ -63,12 +63,22 @@
 
       </div>
       <div class="meetups-page-tabs">
-        <button @click="view = 'list'" class="meetups-page-tabs__tab meetups-page-tabs__tab_active" type="button">
+        <button
+            @click="view = 'list'"
+            class="meetups-page-tabs__tab"
+            :class="{'meetups-page-tabs__tab_active': view === 'list'}"
+            type="button"
+        >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="black"/>
           </svg>
         </button>
-        <button @click="view = 'calendar'" class="meetups-page-tabs__tab" type="button">
+        <button
+            @click="view = 'calendar'"
+            class="meetups-page-tabs__tab"
+            :class="{'meetups-page-tabs__tab_active': view === 'calendar'}"
+            type="button"
+        >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="red"/>
           </svg>
@@ -121,13 +131,13 @@
 <script>
 
 import HelloWorld from '@/components/HelloWorld.vue'
-import meetupsData from "../../api/meetups-data";
+// import meetupsData from "../../api/meetups-data";
 
 export default {
   name: 'HomeView',
   data() {
     return {
-      rawMeetups: meetupsData,
+      rawMeetups: [],
       filter: {
         date: 'all',
         participation: 'all',
@@ -143,6 +153,9 @@ export default {
   },
   computed: {
     meetups() {
+      if (!this.rawMeetups) {
+        return null;
+      }
       return this.rawMeetups.map((meetup) => ({
         ...meetup,
         cover: meetup.imageId ? `https://course-vue.javascript.ru/api/images/${meetup.imageId}` : undefined,
@@ -157,7 +170,32 @@ export default {
     }
   },
   methods: {
+    async getMeetupsData() {
+      const data = await fetch('./meetups.json').then(meetups => {
+        return this.rawMeetups = meetups.json()
+      })
+      console.log(data)
+      console.log(data.length)
+      console.log()
+      // if (data.length) {
+      //   return this.rawMeetups = data.meetups.json();
+      // }
+
+    },
+
+    // async getMeetupsData() {
+    //  this.rawMeetups = await fetch('./meetups.json').then(meetups => {
+    //    return meetups.json()
+    //  })
+    //      .then(res => {
+    //        console.log(res)
+    //      })
+    //
+    // },
     getfilteredMeetups() {
+      if (!this.meetups) {
+        return null;
+      }
       const datefilter = (meetup) =>
           this.filter.date === 'all' ||
           (this.filter.date === 'past' && new Date(meetup.date) <= new Date()) ||
@@ -182,6 +220,12 @@ export default {
       );
     },
   },
+  mounted() {
+    this.getMeetupsData();
+  },
+  // async mounted() {
+  //   this.getMeetupsData = await fetchMeetups();
+  // },
   watch: {
     filter: {
       deep: true,
